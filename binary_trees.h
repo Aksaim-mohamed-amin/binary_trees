@@ -58,6 +58,6 @@ bst_t *bst_search(const bst_t *tree, int value);
 bst_t *bst_remove(bst_t *root, int value);
 
 /* Help Functions */
-
+void binary_tree_inorder_level(const binary_tree_t *tree, void (*func)(int), size_t level);
 
 #endif /* BINARY_TREES */
