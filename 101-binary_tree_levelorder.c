@@ -22,24 +22,6 @@ size_t binary_tree_height(const binary_tree_t *tree)
 }
 
 /**
- * binary_tree_depth - Measures the depth of a node in a binary tree.
- *
- * @tree: Pointer to the node to measure the depth.
- *
- * Return: depth of the tree or 0 if tree is null.
- */
-size_t binary_tree_depth(const binary_tree_t *tree)
-{
-	if (tree == NULL)
-		return (0);
-
-	if (!tree->parent)
-		return (0);
-
-	return (1 + binary_tree_depth(tree->parent));
-}
-
-/**
  * binary_tree_inorder - Goes through a binary tree using pre-order traversal.
  *
  * @tree: Pointer to the root node of the tree to traverse.
@@ -49,17 +31,16 @@ size_t binary_tree_depth(const binary_tree_t *tree)
 void binary_tree_inorder_level(const binary_tree_t *tree,
 			       void (*func)(int), size_t level)
 {
-	if (tree == NULL || func == NULL)
+	if (tree == NULL)
 		return;
 
-	if (tree->left)
-		binary_tree_inorder_level(tree->left, func, level);
-
-	if (binary_tree_depth(tree) == level)
+	if (level == 1)
 		func(tree->n);
-
-	if (tree->right)
-		binary_tree_inorder_level(tree->right, func, level);
+	else if (level > 1)
+	{
+		binary_tree_inorder_level(tree->left, func, level - 1);
+		binary_tree_inorder_level(tree->right, func, level - 1);
+	}
 }
 /**
  * binary_tree_levelorder - Goes through a binary tree using
@@ -70,16 +51,13 @@ void binary_tree_inorder_level(const binary_tree_t *tree,
  */
 void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 {
-	size_t tree_height, level = 0;
+	size_t tree_height, level;
 
-	if (tree == NULL)
+	if (tree == NULL || func == NULL)
 		return;
 
 	tree_height = binary_tree_height(tree);
 
-	while (level < tree_height)
-	{
+	for (level = 1; level <= tree_height; level++)
 		binary_tree_inorder_level(tree, func, level);
-		level++;
-	}
 }
