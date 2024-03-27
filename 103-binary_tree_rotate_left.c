@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include "binary_trees.h"
-#include <stdio.h>
 
 /**
  * binary_tree_rotate_left - Performs a left-rotation on a binary tree.
