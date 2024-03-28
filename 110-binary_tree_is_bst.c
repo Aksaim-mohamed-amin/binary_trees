@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <limits.h>
 #include "binary_trees.h"
 
 /**
