@@ -13,7 +13,7 @@ bst_t *bst_insert(bst_t **tree, int value)
 {
 	binary_tree_t *new_node;
 
-	/* In CAse the tree is empty */
+	/* In Case the tree is empty */
 	if (*tree == NULL)
 	{
 		new_node = binary_tree_node(*tree, value);
