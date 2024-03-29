@@ -19,6 +19,9 @@ int main(void)
 		return (1);
 	binary_tree_print(tree);
 
+	tree = bst_remove(tree, 110);
+	binary_tree_print(tree);
+	
 	tree = bst_remove(tree, 95);
 	binary_tree_print(tree);
 
