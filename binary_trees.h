@@ -75,6 +75,6 @@ int *heap_to_sorted_array(heap_t *heap, size_t *size);
 /* Help Functions */
 void binary_tree_inorder_level(const binary_tree_t *tree, void (*func)(int), size_t level);
 void binary_tree_remove_leaf(binary_tree_t *leaf);
-bst_t *bst_swapp_with_leaf(bst_t *root);
+bst_t *bst_swapp_with_leaf(bst_t *node);
 
 #endif /* BINARY_TREES */
