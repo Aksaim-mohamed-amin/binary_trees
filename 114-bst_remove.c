@@ -14,19 +14,19 @@
 bst_t *bst_remove(bst_t *root, int value)
 {
 	if (root == NULL)
-		return NULL;
+		return (NULL);
 
 	bst_t *node = bst_search(root, value);
 
 	if (node == NULL)
-		return root;
+		return (root);
 
 	if (node->left == NULL && node->right == NULL)
 	{
 		if (node->parent == NULL)
 		{
 			free(node);
-			return NULL;
+			return (NULL);
 		}
 		binary_tree_remove_leaf(node);
 	}
@@ -35,7 +35,7 @@ bst_t *bst_remove(bst_t *root, int value)
 		node = bst_swapp_with_leaf(node);
 		binary_tree_remove_leaf(node);
 	}
-	return root;
+	return (root);
 }
 
 /**
@@ -50,15 +50,15 @@ bst_t *bst_remove(bst_t *root, int value)
 bst_t *bst_search(const bst_t *tree, int value)
 {
 	if (tree == NULL)
-		return NULL;
+		return (NULL);
 
 	if (tree->n == value)
-		return (bst_t *)tree;
+		return ((bst_t *)tree);
 
 	if (tree->n > value)
-		return bst_search(tree->left, value);
+		return (bst_search(tree->left, value));
 
-	return bst_search(tree->right, value);
+	return (bst_search(tree->right, value));
 }
 
 /**
@@ -91,8 +91,9 @@ bst_t *bst_swapp_with_leaf(bst_t *node)
 		successor = successor->left;
 
 	int tmp = successor->n;
+
 	successor->n = node->n;
 	node->n = tmp;
 
-	return successor;
+	return (successor);
 }
