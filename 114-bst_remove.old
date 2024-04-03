@@ -13,29 +13,28 @@
  */
 bst_t *bst_remove(bst_t *root, int value)
 {
+	bst_t *node, *leaf;
+
 	if (root == NULL)
-		return NULL;
+		return (root);
 
-	bst_t *node = bst_search(root, value);
+	node = bst_search(root, value);
 
+	/* If value not found in tree */
 	if (node == NULL)
-		return root;
+		return (root);
 
+	/* If value found in a leaf */
 	if (node->left == NULL && node->right == NULL)
-	{
-		if (node->parent == NULL)
-		{
-			free(node);
-			return NULL;
-		}
 		binary_tree_remove_leaf(node);
-	}
-	else
+
+	/* If value have a child or two */
+	if (node->left != NULL || node->right != NULL)
 	{
-		node = bst_swapp_with_leaf(node);
-		binary_tree_remove_leaf(node);
+		leaf = bst_swapp_with_leaf(node);
+		binary_tree_remove_leaf(leaf);
 	}
-	return root;
+	return (root);
 }
 
 /**
@@ -50,15 +49,18 @@ bst_t *bst_remove(bst_t *root, int value)
 bst_t *bst_search(const bst_t *tree, int value)
 {
 	if (tree == NULL)
-		return NULL;
+		return (NULL);
 
 	if (tree->n == value)
-		return (bst_t *)tree;
+		return ((bst_t *)tree);
 
 	if (tree->n > value)
-		return bst_search(tree->left, value);
+		return (bst_search(tree->left, value));
 
-	return bst_search(tree->right, value);
+	if (tree->n < value)
+		return (bst_search(tree->right, value));
+
+	return (NULL);
 }
 
 /**
@@ -68,31 +70,40 @@ bst_t *bst_search(const bst_t *tree, int value)
  */
 void binary_tree_remove_leaf(binary_tree_t *leaf)
 {
-	if (leaf->parent->left == leaf)
-		leaf->parent->left = NULL;
-	else
-		leaf->parent->right = NULL;
-
+	if (leaf->parent)
+	{
+		if (leaf->parent->left == leaf)
+			leaf->parent->left = NULL;
+		else
+			leaf->parent->right = NULL;
+	}
 	free(leaf);
 }
 
 /**
- * bst_swapp_with_leaf - Swap the node with its first in-order successor.
+ * bst_swapp_with_leaf - Swap the root with a leaf node in-order successor.
  *
- * @node: Pointer to the node to be swapped.
+ * @root: Pointer to the root to swap.
  *
- * Return: Pointer to the in-order successor swapped with the node.
+ * Return: pointer to the leaf swapped with it.
  */
-bst_t *bst_swapp_with_leaf(bst_t *node)
+bst_t *bst_swapp_with_leaf(bst_t *root)
 {
-	bst_t *successor = node->right;
+	int tmp;
+	bst_t *leaf;
 
-	while (successor->left != NULL)
-		successor = successor->left;
+	leaf = (root->right != NULL) ? root->right : root->left;
 
-	int tmp = successor->n;
-	successor->n = node->n;
-	node->n = tmp;
+	while (leaf->left || leaf->right)
+	{
+		if (leaf->left)
+			leaf = leaf->left;
+		else
+			leaf = leaf->right;
+	}
+	tmp = leaf->n;
+	leaf->n = root->n;
+	root->n = tmp;
 
-	return successor;
+	return (leaf);
 }
