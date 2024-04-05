@@ -1,16 +1,9 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "binary_trees.h"
-
-/* Our own functions */
-void binary_tree_print(const binary_tree_t *tree);
-bst_t *array_to_bst(int *array, size_t size);
-void binary_tree_delete(binary_tree_t *tree);
 
 /**
  * main - Entry point
  *
- * Return: Always 0 (Success)
+ * Return: 0 on success, error code on failure
  */
 int main(void)
 {
@@ -26,12 +19,8 @@ int main(void)
 		return (1);
 	binary_tree_print(tree);
 
-	tree = bst_remove(tree, 79);
-	printf("Removed 79...\n");
-	binary_tree_print(tree);
-
-	tree = bst_remove(tree, 21);
-	printf("Removed 21...\n");
+	tree = bst_remove(tree, 68);
+	printf("Removed 68...\n");
 	binary_tree_print(tree);
 
 	binary_tree_delete(tree);

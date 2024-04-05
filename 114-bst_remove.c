@@ -10,73 +10,38 @@
  * @value: The value to remove in the tree.
  *
  * Return: Pointer to the new root node of the tree after removing the node.
- */
-bst_t *bst_remove(bst_t *root, int value)
+ */bst_t *bst_remove(bst_t *root, int value)
 {
-	bst_t *node, *child;
-
 	if (root == NULL)
-		return (NULL);
+		return NULL;
 
-	node = bst_search(root, value);
+	bst_t *node = bst_search(root, value);
 
-	/* If the value not found in tree */
 	if (node == NULL)
-		return (root);
+		return root; // Value not found
 
-	/* If the value found in a leaf */
-	if (!node->left && !node->right)
-	{
-		if (node->parent)
-		{
-			if (node->parent->left == node)
-				node->parent->left = NULL;
-			else
-				node->parent->right = NULL;
-			free(node);
-		}
-		else
-		{
-			free(node);
-			return (NULL);
-		}
-	}
+	// If node has at most one child
+	if (node->left == NULL || node->right == NULL) {
+		bst_t *child = (node->left != NULL) ? node->left : node->right;
 
-	/* If the value found in a node with one child */
-	if ((node->left && !node->right) || (!node->left && node->right))
-	{
-		child = (node->left) ? node->left : node->right;
-
-		if (node->parent)
-		{
+		if (child != NULL)
 			child->parent = node->parent;
 
-			if (node->parent->left == node)
-				node->parent->left = child;
-			else
-				node->parent->right = child;
-			free(node);
-		}
+		if (node->parent == NULL)
+			root = child;
+		else if (node == node->parent->left)
+			node->parent->left = child;
 		else
-		{
-			child->parent = NULL;
-			free(node);
-			return (child);
-		}
-	}
+			node->parent->right = child;
 
-	/* If the value found in a leaf with two child */
-	if (node->left && node->right)
-	{
-		node = bst_successor(node);
-		if (node->parent->left == node)
-			node->parent->left = NULL;
-		else
-			node->parent->right = NULL;
 		free(node);
+	} else { // If node has two children
+		bst_t *successor = bst_successor(node);
+		node->n = successor->n;
+		root = bst_remove(root, successor->n); // Remove the successor
 	}
 
-	return (root);
+	return root;
 }
 
 /**
