@@ -13,28 +13,69 @@
  */
 bst_t *bst_remove(bst_t *root, int value)
 {
+	bst_t *node, *child;
+
 	if (root == NULL)
 		return (NULL);
 
-	bst_t *node = bst_search(root, value);
+	node = bst_search(root, value);
 
+	/* If the value not found in tree */
 	if (node == NULL)
 		return (root);
 
-	if (node->left == NULL && node->right == NULL)
+	/* If the value found in a leaf */
+	if (!node->left && !node->right)
 	{
-		if (node->parent == NULL)
+		if (node->parent)
+		{
+			if (node->parent->left == node)
+				node->parent->left = NULL;
+			else
+				node->parent->right = NULL;
+			free(node);
+		}
+		else
 		{
 			free(node);
 			return (NULL);
 		}
-		binary_tree_remove_leaf(node);
 	}
-	else
+
+	/* If the value found in a node with one child */
+	if ((node->left && !node->right) || (!node->left && node->right))
 	{
-		node = bst_swapp_with_leaf(node);
-		binary_tree_remove_leaf(node);
+		child = (node->left) ? node->left : node->right;
+
+		if (node->parent)
+		{
+			child->parent = node->parent;
+
+			if (node->parent->left == node)
+				node->parent->left = child;
+			else
+				node->parent->right = child;
+			free(node);
+		}
+		else
+		{
+			child->parent = NULL;
+			free(node);
+			return (child);
+		}
 	}
+
+	/* If the value found in a leaf with two child */
+	if (node->left && node->right)
+	{
+		node = bst_successor(node);
+		if (node->parent->left == node)
+			node->parent->left = NULL;
+		else
+			node->parent->right = NULL;
+		free(node);
+	}
+
 	return (root);
 }
 
@@ -58,42 +99,36 @@ bst_t *bst_search(const bst_t *tree, int value)
 	if (tree->n > value)
 		return (bst_search(tree->left, value));
 
-	return (bst_search(tree->right, value));
+	if (tree->n < value)
+		return (bst_search(tree->right, value));
+
+	return (NULL);
 }
 
 /**
- * binary_tree_remove_leaf - Remove a leaf from binary tree.
+ * bst_successor - Swap a node with it in order successor.
  *
- * @leaf: Pointer to the leaf.
+ * @node: Pointer to the node to swap.
+ *
+ * Return: Pointer to the new position of the node.
  */
-void binary_tree_remove_leaf(binary_tree_t *leaf)
+bst_t *bst_successor(binary_tree_t *node)
 {
-	if (leaf->parent->left == leaf)
-		leaf->parent->left = NULL;
-	else
-		leaf->parent->right = NULL;
+	int tmp;
+	bst_t *leaf;
 
-	free(leaf);
-}
+	leaf = (node->right != NULL) ? node->right : node->left;
 
-/**
- * bst_swapp_with_leaf - Swap the node with its first in-order successor.
- *
- * @node: Pointer to the node to be swapped.
- *
- * Return: Pointer to the in-order successor swapped with the node.
- */
-bst_t *bst_swapp_with_leaf(bst_t *node)
-{
-	bst_t *successor = node->right;
-
-	while (successor->left != NULL)
-		successor = successor->left;
-
-	int tmp = successor->n;
-
-	successor->n = node->n;
+	while (leaf->left || leaf->right)
+	{
+		if (leaf->left)
+			leaf = leaf->left;
+		else
+			leaf = leaf->right;
+	}
+	tmp = leaf->n;
+	leaf->n = node->n;
 	node->n = tmp;
 
-	return (successor);
+	return (leaf);
 }
