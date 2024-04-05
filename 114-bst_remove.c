@@ -10,38 +10,73 @@
  * @value: The value to remove in the tree.
  *
  * Return: Pointer to the new root node of the tree after removing the node.
- */bst_t *bst_remove(bst_t *root, int value)
+ */
+bst_t *bst_remove(bst_t *root, int value)
 {
+	bst_t *node, *child;
+
 	if (root == NULL)
-		return NULL;
+		return (NULL);
 
-	bst_t *node = bst_search(root, value);
+	node = bst_search(root, value);
 
+	/* If the value not found in tree */
 	if (node == NULL)
-		return root; // Value not found
+		return (root);
 
-	// If node has at most one child
-	if (node->left == NULL || node->right == NULL) {
-		bst_t *child = (node->left != NULL) ? node->left : node->right;
-
-		if (child != NULL)
-			child->parent = node->parent;
-
-		if (node->parent == NULL)
-			root = child;
-		else if (node == node->parent->left)
-			node->parent->left = child;
+	/* If the value found in a leaf */
+	if (!node->left && !node->right)
+	{
+		if (node->parent)
+		{
+			if (node->parent->left == node)
+				node->parent->left = NULL;
+			else
+				node->parent->right = NULL;
+			free(node);
+		}
 		else
-			node->parent->right = child;
-
-		free(node);
-	} else { // If node has two children
-		bst_t *successor = bst_successor(node);
-		node->n = successor->n;
-		root = bst_remove(root, successor->n); // Remove the successor
+		{
+			free(node);
+			return (NULL);
+		}
 	}
 
-	return root;
+	/* If the value found in a node with one child */
+	else if ((node->left && !node->right) || (!node->left && node->right))
+	{
+		child = (node->left) ? node->left : node->right;
+
+		if (node->parent)
+		{
+			child->parent = node->parent;
+
+			if (node->parent->left == node)
+				node->parent->left = child;
+			else
+				node->parent->right = child;
+			free(node);
+		}
+		else
+		{
+			child->parent = NULL;
+			free(node);
+			return (child);
+		}
+	}
+
+	/* If the value found in a leaf with two child */
+	else if (node->left && node->right)
+	{
+		node = bst_successor(node);
+		if (node->parent->left == node)
+			node->parent->left = NULL;
+		else
+			node->parent->right = NULL;
+		free(node);
+	}
+
+	return (root);
 }
 
 /**
