@@ -1,10 +1,10 @@
 #include "binary_trees.h"
 
 /**
- * main - Entry point
- *
- * Return: 0 on success, error code on failure
- */
+* main - Entry point
+*
+* Return: 0 on success, error code on failure
+*/
 int main(void)
 {
 	bst_t *tree;
@@ -19,10 +19,17 @@ int main(void)
 		return (1);
 	binary_tree_print(tree);
 
+	tree = bst_remove(tree, 79);
+	printf("Removed 79...\n");
+	binary_tree_print(tree);
+
+	tree = bst_remove(tree, 21);
+	printf("Removed 21...\n");
+	binary_tree_print(tree);
+
 	tree = bst_remove(tree, 68);
 	printf("Removed 68...\n");
 	binary_tree_print(tree);
-
 	binary_tree_delete(tree);
 	return (0);
 }
