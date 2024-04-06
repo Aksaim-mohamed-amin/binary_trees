@@ -26,6 +26,7 @@ bst_t *bst_remove(bst_t *root, int value)
 
 	else
 	{
+		/* If the value found in a leaf or a node with one child */
 		if (root->left == NULL)
 		{
 			tmp = root->right;
@@ -43,14 +44,13 @@ bst_t *bst_remove(bst_t *root, int value)
 			return (tmp);
 		}
 
+		/* It the vakue found in a node with two childs */
 		tmp = root->right;
 		while (tmp != NULL && tmp->left != NULL)
 			tmp = tmp->left;
-
 		root->n = tmp->n;
 
 		root->right = bst_remove(root->right, tmp->n);
 	}
-
 	return (root);
 }
