@@ -29,7 +29,7 @@ bst_t *bst_remove(bst_t *root, int value)
 		if (root->left == NULL)
 		{
 			tmp = root->right;
-			free(tmp);
+			free(root);
 			return (tmp);
 		}
 		else if (root->right == NULL)

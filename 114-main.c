@@ -7,29 +7,18 @@
 */
 int main(void)
 {
-	bst_t *tree;
+	bst_t *root;
 	int array[] = {
-		79, 47, 68, 87, 84, 91, 21, 32, 34, 2,
-		20, 22, 98, 1, 62, 95
+		98, 110, 43, 56, 2, 78, 123, 76, 234
 	};
-	size_t n = sizeof(array) / sizeof(array[0]);
+	size_t size = sizeof(array) / sizeof(array[0]);
 
-	tree = array_to_bst(array, n);
-	if (!tree)
-		return (1);
-	binary_tree_print(tree);
+	root = array_to_bst(array, size);
+	binary_tree_print(root);
 
-	tree = bst_remove(tree, 79);
-	printf("Removed 79...\n");
-	binary_tree_print(tree);
+	root = bst_remove(root, 43);
+	binary_tree_print(root);
 
-	tree = bst_remove(tree, 21);
-	printf("Removed 21...\n");
-	binary_tree_print(tree);
-
-	tree = bst_remove(tree, 68);
-	printf("Removed 68...\n");
-	binary_tree_print(tree);
-	binary_tree_delete(tree);
+	binary_tree_delete(root);
 	return (0);
 }
