@@ -40,7 +40,7 @@ bst_t *bst_remove(bst_t *root, int value)
 		}
 
 		tmp = root->right;
-		while (tmp !=NULL && tmp->left != NULL)
+		while (tmp != NULL && tmp->left != NULL)
 			tmp = tmp->left;
 
 		root->n = tmp->n;
