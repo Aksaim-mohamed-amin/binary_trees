@@ -29,14 +29,16 @@ bst_t *bst_remove(bst_t *root, int value)
 		if (root->left == NULL)
 		{
 			tmp = root->right;
-			tmp->parent = root->parent;
+			if (tmp)
+				tmp->parent = root->parent;
 			free(root);
 			return (tmp);
 		}
 		else if (root->right == NULL)
 		{
 			tmp = root->left;
-			tmp->parent = root->parent;
+			if (tmp)
+				tmp->parent = root->parent;
 			free(root);
 			return (tmp);
 		}
