@@ -49,29 +49,30 @@ bst_t *bst_insert(bst_t **tree, int value)
  *
  * @tree: Double pointer to the root of the bst tree.
  * @key: Node key to balance on it.
+ * @mode: 1 for using the function while inserting and 0 while deleting.
  *
  * Return: Pointer to the balance tree.
  */
-binary_tree_t *bst_balance(binary_tree_t *tree, int key)
+binary_tree_t *bst_balance(binary_tree_t *tree, int key, int mode)
 {
 	int balance;
 
 	if (tree == NULL)
 		return (NULL);
 
-	tree->left = bst_balance(tree->left, key);
-	tree->right = bst_balance(tree->right, key);
+	tree->left = bst_balance(tree->left, key, mode);
+	tree->right = bst_balance(tree->right, key, mode);
 
 	balance = binary_tree_balance(tree);
 	if (balance > 1)
 	{
-		if (key > tree->left->n)
+		if (key > tree->left->n && mode)
 			tree->left = binary_tree_rotate_left(tree->left);
 		return (binary_tree_rotate_right(tree));
 	}
 	else if (balance < -1)
 	{
-		if (key < tree->right->n)
+		if (key < tree->right->n && mode)
 			tree->right = binary_tree_rotate_right(tree->right);
 		return (binary_tree_rotate_left(tree));
 	}
@@ -94,6 +95,6 @@ avl_t *avl_insert(avl_t **tree, int value)
 	avl_t *new_node;
 
 	new_node = bst_insert(tree, value);
-	*tree = bst_balance(*tree, value);
+	*tree = bst_balance(*tree, value, 1);
 	return (new_node);
 }
