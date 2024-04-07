@@ -56,6 +56,42 @@ bst_t *bst_remove(bst_t *root, int value)
 }
 
 /**
+ * bst_balance - Balance a binary search tree to get AVL tree.
+ *
+ * @tree: Double pointer to the root of the bst tree.
+ * @key: Node key to balance on it.
+ * @mode: 1 for using the function while inserting and 0 while deleting.
+ *
+ * Return: Pointer to the balance tree.
+ */
+binary_tree_t *bst_balance(binary_tree_t *tree, int key, int mode)
+{
+	int balance;
+
+	if (tree == NULL)
+		return (NULL);
+
+	tree->left = bst_balance(tree->left, key, mode);
+	tree->right = bst_balance(tree->right, key, mode);
+
+	balance = binary_tree_balance(tree);
+	if (balance > 1)
+	{
+		if (key > tree->left->n && mode)
+			tree->left = binary_tree_rotate_left(tree->left);
+		return (binary_tree_rotate_right(tree));
+	}
+	else if (balance < -1)
+	{
+		if (key < tree->right->n && mode)
+			tree->right = binary_tree_rotate_right(tree->right);
+		return (binary_tree_rotate_left(tree));
+	}
+
+	return (tree);
+}
+
+/**
  * avl_remove - Removes a node from an AVL tree,
  *              If the node to be deleted has two children,
  *              it must be replaced with its first in-order successor
