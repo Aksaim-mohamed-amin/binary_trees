@@ -11,31 +11,26 @@ int main(void)
 {
 	avl_t *root;
 	avl_t *node;
+	int array[] = {
+		98, 110, 43, 56, 2, 78, 123, 76, 234
+	};
+	size_t size = sizeof(array) / sizeof(array[0]);
+	size_t i;
 
 	root = NULL;
-	node = avl_insert(&root, 98);
-	printf("Inserted: %d\n", node->n);
-	binary_tree_print(root);
-	node = avl_insert(&root, 402);
-	printf("\nInserted: %d\n", node->n);
-	binary_tree_print(root);
-	node = avl_insert(&root, 12);
-	printf("\nInserted: %d\n", node->n);
-	binary_tree_print(root);
-	node = avl_insert(&root, 46);
-	printf("\nInserted: %d\n", node->n);
-	binary_tree_print(root);
-	node = avl_insert(&root, 128);
-	printf("\nInserted: %d\n", node->n);
-	binary_tree_print(root);
-	node = avl_insert(&root, 256);
-	printf("\nInserted: %d\n", node->n);
-	binary_tree_print(root);
-	node = avl_insert(&root, 512);
-	printf("\nInserted: %d\n", node->n);
-	binary_tree_print(root);
-	node = avl_insert(&root, 50);
-	printf("\nInserted: %d\n", node->n);
-	binary_tree_print(root);
+	for (i = 0; i < size; i++)
+	{
+		node = avl_insert(&root, array[i]);
+		if (node)
+		{
+			printf("\n\n\n\nValue inserted: %d\n", node->n);
+			binary_tree_print(root);
+		}
+		else
+		{
+			printf("Value not inserted: %d\n", array[i]);
+		}
+	}
+	binary_tree_delete(root);
 	return (0);
 }

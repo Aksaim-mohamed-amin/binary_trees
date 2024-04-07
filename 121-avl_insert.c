@@ -58,6 +58,9 @@ binary_tree_t *bst_balance(binary_tree_t *tree, int key)
 
 	if (tree == NULL)
 		return (NULL);
+	
+	tree->left = bst_balance(tree->left, key);
+	tree->right = bst_balance(tree->right, key);
 
 	balance = binary_tree_balance(tree);
 	if (balance > 1)
@@ -72,9 +75,6 @@ binary_tree_t *bst_balance(binary_tree_t *tree, int key)
 			tree->right = binary_tree_rotate_left(tree->right);
 		return (binary_tree_rotate_left(tree));
 	}
-
-	tree->left = bst_balance(tree->left, key);
-	tree->right = bst_balance(tree->right, key);
 
 	return (tree);
 }
